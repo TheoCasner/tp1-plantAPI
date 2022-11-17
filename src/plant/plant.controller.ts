@@ -8,6 +8,7 @@ import {
 import {
   ApiNotFoundResponse,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -23,6 +24,14 @@ export class PlantController {
   constructor(private readonly plantService: PlantService) {}
 
   @ApiOperation({ summary: 'Get plant by Id' })
+  @ApiParam({
+    name: 'id',
+    description: 'The id to search for',
+    required: true,
+    schema: {
+      type: 'integer',
+    },
+  })
   @ApiResponse({
     status: 200,
     description: 'Returns the plant with the given id',
@@ -58,6 +67,14 @@ export class PlantController {
       type: 'integer',
       default: DEFAULT_OFFSET,
       minimum: 0,
+    },
+  })
+  @ApiParam({
+    name: 'prefix',
+    description: 'The prefix to match',
+    required: true,
+    schema: {
+      type: 'string',
     },
   })
   @ApiResponse({
