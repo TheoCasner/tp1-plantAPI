@@ -23,33 +23,6 @@ import { PlantService } from './plant.service';
 export class PlantController {
   constructor(private readonly plantService: PlantService) {}
 
-  @ApiOperation({ summary: 'Get plant by Id' })
-  @ApiParam({
-    name: 'id',
-    description: 'The id to search for',
-    required: true,
-    schema: {
-      type: 'integer',
-    },
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Returns the plant with the given id',
-    type: PlantEntity,
-  })
-  @ApiNotFoundResponse({
-    status: 404,
-    description: 'Plant not found',
-  })
-  @Get(':id')
-  getPlantById(@Param('id') id: string): PlantEntity {
-    try {
-      return this.plantService.getPlantById(+id);
-    } catch (error) {
-      throw new NotFoundException(error?.message);
-    }
-  }
-
   @ApiOperation({ summary: 'Get plants matching prefix' })
   @ApiQuery({
     name: 'limit',
@@ -82,11 +55,38 @@ export class PlantController {
     description: 'Returns the plant with the given prefix',
     type: [PlantEntity],
   })
-  @Get('/search/:prefix')
+  @Get('/search/:prefix?')
   getPlantMatchingPrefix(
-    @Param('prefix') prefix: string,
     @Query() queryDto: { limit?: number; offset?: number },
+    @Param('prefix') prefix: string,
   ): PlantEntity[] {
     return this.plantService.getPlantMatchingPrefix(prefix, queryDto);
+  }
+
+  @ApiOperation({ summary: 'Get plant by Id' })
+  @ApiParam({
+    name: 'id',
+    description: 'The id to search for',
+    required: true,
+    schema: {
+      type: 'integer',
+    },
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the plant with the given id',
+    type: PlantEntity,
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Plant not found',
+  })
+  @Get(':id')
+  getPlantById(@Param('id') id: string): PlantEntity {
+    try {
+      return this.plantService.getPlantById(+id);
+    } catch (error) {
+      throw new NotFoundException(error?.message);
+    }
   }
 }

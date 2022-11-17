@@ -20,7 +20,9 @@ export class PlantService {
     prefix: string,
     queryDto: { limit?: number; offset?: number },
   ): PlantEntity[] {
-    const plantsFiltered = plant.filter((p) => p.name.startsWith(prefix));
+    const plantsFiltered = prefix
+      ? plant.filter((p) => p.name.startsWith(prefix))
+      : plant;
     return plantsFiltered.slice(queryDto.offset).slice(0, queryDto.limit);
   }
 }
