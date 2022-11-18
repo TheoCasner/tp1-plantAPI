@@ -14,7 +14,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from 'src/app.controller';
-import { PlantEntity } from './plant.entity';
+import { PlantQueryDto } from '../dto/plant.dto';
+import { PlantEntity } from '../entity/plant.entity';
 
 import { PlantService } from './plant.service';
 
@@ -57,7 +58,7 @@ export class PlantController {
   })
   @Get('/search/:prefix?')
   getPlantMatchingPrefix(
-    @Query() queryDto: { limit?: number; offset?: number },
+    @Query() queryDto: PlantQueryDto,
     @Param('prefix') prefix: string,
   ): PlantEntity[] {
     return this.plantService.getPlantMatchingPrefix(prefix, queryDto);

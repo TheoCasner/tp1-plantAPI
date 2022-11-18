@@ -1,7 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { PlantQueryDto } from './dto/plant.dto';
 
-import { PlantEntity } from './plant/plant.entity';
+import { PlantEntity } from './entity/plant.entity';
 import { PlantService } from './plant/plant.service';
 
 export const DEFAULT_LIMIT = 10;
@@ -36,9 +37,7 @@ export class AppController {
     type: [PlantEntity],
   })
   @Get()
-  getAllPlants(
-    @Query() queryDto: { limit?: number; offset?: number },
-  ): PlantEntity[] {
+  getAllPlants(@Query() queryDto: PlantQueryDto): PlantEntity[] {
     return this.plantService.getAllPlants(queryDto);
   }
 }
