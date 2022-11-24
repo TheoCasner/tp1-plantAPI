@@ -14,8 +14,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { DEFAULT_LIMIT, DEFAULT_OFFSET } from 'src/app.controller';
-import { PlantQueryDto } from '../dto/plant.dto';
-import { PlantEntity } from '../entity/plant.entity';
+import { PlantDto, PlantQueryDto } from '../dto/plant.dto';
 
 import { PlantService } from './plant.service';
 
@@ -54,13 +53,13 @@ export class PlantController {
   @ApiResponse({
     status: 200,
     description: 'Returns the plant with the given prefix',
-    type: [PlantEntity],
+    type: [PlantDto],
   })
   @Get('/search/:prefix?')
   getPlantMatchingPrefix(
     @Query() queryDto: PlantQueryDto,
     @Param('prefix') prefix: string,
-  ): PlantEntity[] {
+  ): PlantDto[] {
     return this.plantService.getPlantMatchingPrefix(prefix, queryDto);
   }
 
@@ -76,14 +75,14 @@ export class PlantController {
   @ApiResponse({
     status: 200,
     description: 'Returns the plant with the given id',
-    type: PlantEntity,
+    type: PlantDto,
   })
   @ApiNotFoundResponse({
     status: 404,
     description: 'Plant not found',
   })
   @Get(':id')
-  getPlantById(@Param('id') id: string): PlantEntity {
+  getPlantById(@Param('id') id: string): PlantDto {
     try {
       return this.plantService.getPlantById(+id);
     } catch (error) {
