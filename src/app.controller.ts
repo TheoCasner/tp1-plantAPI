@@ -1,5 +1,11 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { MessageDto } from './dto/app.dto';
 import { PlantDto, PlantQueryDto } from './dto/plant.dto';
 
 import { PlantService } from './plant/plant.service';
@@ -43,8 +49,21 @@ export class AppController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Check if you are old enough to bypass parentcontrol',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the message if you can access',
+    type: [MessageDto],
+  })
+  @ApiUnauthorizedResponse({
+    status: 401,
+    description: 'Unauthorized',
+    type: [MessageDto],
+  })
   @Get('content')
-  async routeToCheckParentControl() {
+  async routeToCheckParentControl(): Promise<MessageDto> {
     return { message: 'You are allowed to access this route' };
   }
 }

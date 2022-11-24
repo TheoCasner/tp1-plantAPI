@@ -18,6 +18,10 @@ export class UserService {
   }
 
   async updateUserRole(updateUserPayload: UpdateUserRole): Promise<UserDto> {
+    if (!Object.values(ROLE).includes(updateUserPayload.role)) {
+      throw new Error('Invalid role');
+    }
+
     return this.prisma.user.update({
       where: {
         id: updateUserPayload.id,
