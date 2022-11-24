@@ -37,9 +37,10 @@ export class PlantService {
         name: {
           startsWith: prefix,
         },
+        deleted: false,
       },
     });
-    if (!prefix) query['where'] = undefined;
+    if (!prefix) query['where']['name'] = undefined;
     return query;
   }
 }

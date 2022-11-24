@@ -5,9 +5,12 @@ import { readFileSync } from 'fs';
 
 const prisma = new PrismaClient();
 
-function getJsonSeedFile(filePath: string): Plant[] {
-  // return JSON.parse(readFileSync(filePath, 'utf-8'));
-  return JSON.parse(readFileSync(__dirname + '/' + filePath, 'utf-8'));
+async function getJsonSeedFile(filePath: string): Promise<Plant[]> {
+  try {
+    return await JSON.parse(readFileSync(filePath, 'utf-8'));
+  } catch (error) {
+    throw new Error('Error while reading file ! -- try providing full path');
+  }
 }
 
 function setupDb(): void {
@@ -39,7 +42,8 @@ async function seedPlantsDb(plantsFromJson: Plant[]): Promise<void> {
 
     // if plant in db not in json
     for (const p of plants) {
-      if (!plantsFromJson.find((p) => p.id === p.id)) {
+      const plantInJson = plantsFromJson.find((plant) => plant.id === p.id);
+      if (!plantInJson) {
         await prisma.plant.update({
           where: { id: p.id },
           data: {
@@ -80,11 +84,13 @@ async function seedPlantsDb(plantsFromJson: Plant[]): Promise<void> {
   console.log('Finished seeding !');
 }
 
-async function main(): Promise<void> {
-  const plantsFromJson = getJsonSeedFile('../plant.json');
-  setupDb();
-  seedPlantsDb(plantsFromJson);
+async function main(args: any): Promise<void> {
+  if (args.length <= 2) throw new Error('No file path provided !');
+
+  const plantsFromJson = await getJsonSeedFile(args[2]);
+  await setupDb();
+  await seedPlantsDb(plantsFromJson);
   await prisma.$disconnect();
 }
 
-main();
+main(process.argv);
