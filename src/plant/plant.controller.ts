@@ -45,7 +45,7 @@ export class PlantController {
   @ApiParam({
     name: 'prefix',
     description: 'The prefix to match',
-    required: true,
+    required: false,
     schema: {
       type: 'string',
     },
@@ -56,13 +56,13 @@ export class PlantController {
     type: [PlantDto],
   })
   @Get('/search/:prefix?')
-  getPlantMatchingPrefix(
+  async getPlantMatchingPrefix(
     @Query() queryDto: PlantQueryDto,
     @Param('prefix') prefix: string,
-  ): PlantDto[] {
+  ): Promise<PlantDto[]> {
     return this.plantService.getPlantMatchingPrefix(prefix, {
-      offset: +queryDto.offset,
-      limit: +queryDto.limit,
+      offset: +queryDto.offset || DEFAULT_OFFSET,
+      limit: +queryDto.limit || DEFAULT_LIMIT,
     });
   }
 
@@ -85,9 +85,9 @@ export class PlantController {
     description: 'Plant not found',
   })
   @Get(':id')
-  getPlantById(@Param('id') id: string): PlantDto {
+  async getPlantById(@Param('id') id: string): Promise<PlantDto> {
     try {
-      return this.plantService.getPlantById(+id);
+      return await this.plantService.getPlantById(+id);
     } catch (error) {
       throw new NotFoundException(error?.message);
     }

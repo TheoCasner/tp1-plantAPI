@@ -39,8 +39,8 @@ export class AppController {
   @Get()
   async getAllPlants(@Query() queryDto: PlantQueryDto): Promise<PlantDto[]> {
     return this.plantService.getAllPlants({
-      offset: +queryDto.offset,
-      limit: +queryDto.limit,
+      offset: +queryDto.offset || DEFAULT_OFFSET,
+      limit: +queryDto.limit || DEFAULT_LIMIT,
     });
   }
 }

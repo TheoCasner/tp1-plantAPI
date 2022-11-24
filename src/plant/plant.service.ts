@@ -1,16 +1,13 @@
-import * as plant from '../../plant.json';
-
-import { Plant, PrismaClient } from '@prisma/client';
+import { PlantDto, PlantQueryDto } from '../dto/plant.dto';
 
 import { Injectable } from '@nestjs/common';
-import { PlantEntity } from '../entity/plant.entity';
-import { PlantQueryDto } from '../dto/plant.dto';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class PlantService {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async getAllPlants(queryDto: PlantQueryDto): Promise<Plant[]> {
+  async getAllPlants(queryDto: PlantQueryDto): Promise<PlantDto[]> {
     return this.prisma.plant.findMany({
       skip: queryDto.offset,
       take: queryDto.limit,
@@ -20,20 +17,29 @@ export class PlantService {
     });
   }
 
-  getPlantById(id: number): PlantEntity {
-    const plantToFind = plant.find((p) => p.id === id);
-    if (!plantToFind) throw new Error('Plant Not Found');
+  async getPlantById(id: number): Promise<PlantDto> {
+    const plantToFind = await this.prisma.plant.findFirst({
+      where: { id },
+    });
 
+    if (!plantToFind) throw new Error('Plant Not Found');
     return plantToFind;
   }
 
   getPlantMatchingPrefix(
     prefix: string,
     queryDto: PlantQueryDto,
-  ): PlantEntity[] {
-    const plantsFiltered = prefix
-      ? plant.filter((p) => p.name.startsWith(prefix))
-      : plant;
-    return plantsFiltered.slice(queryDto.offset).slice(0, queryDto.limit);
+  ): Promise<PlantDto[]> {
+    const query = this.prisma.plant.findMany({
+      skip: queryDto.offset,
+      take: queryDto.limit,
+      where: {
+        name: {
+          startsWith: prefix,
+        },
+      },
+    });
+    if (!prefix) query['where'] = undefined;
+    return query;
   }
 }
