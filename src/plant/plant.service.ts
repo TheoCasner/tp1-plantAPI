@@ -40,7 +40,7 @@ export class PlantService {
         deleted: false,
       },
     });
-    if (!prefix) query['where']['name'] = undefined;
+    if (!prefix) query['where'] = { deleted: false };
     return query;
   }
 }
