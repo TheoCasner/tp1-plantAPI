@@ -2,7 +2,6 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { PlantDto, PlantQueryDto } from './dto/plant.dto';
 
-import { PlantEntity } from './entity/plant.entity';
 import { PlantService } from './plant/plant.service';
 
 export const DEFAULT_LIMIT = 10;
@@ -34,7 +33,7 @@ export class AppController {
   @ApiResponse({
     status: 200,
     description: 'Returns a list of plants',
-    type: [PlantEntity],
+    type: [PlantDto],
   })
   @Get()
   async getAllPlants(@Query() queryDto: PlantQueryDto): Promise<PlantDto[]> {

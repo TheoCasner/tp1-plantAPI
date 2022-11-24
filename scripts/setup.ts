@@ -1,11 +1,11 @@
-import { PlantEntity } from 'src/entity/plant.entity';
-import { PrismaClient } from '@prisma/client';
+import { Plant, PrismaClient } from '@prisma/client';
+
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 
 const prisma = new PrismaClient();
 
-function getJsonSeedFile(filePath: string): PlantEntity[] {
+function getJsonSeedFile(filePath: string): Plant[] {
   // return JSON.parse(readFileSync(filePath, 'utf-8'));
   return JSON.parse(readFileSync(__dirname + '/' + filePath, 'utf-8'));
 }
@@ -20,7 +20,7 @@ function setupDb(): void {
   console.log('Prisma generated !');
 }
 
-async function seedPlantsDb(plantsFromJson: PlantEntity[]): Promise<void> {
+async function seedPlantsDb(plantsFromJson: Plant[]): Promise<void> {
   const plants = await prisma.plant.findMany();
   if (plants.length === 0) {
     console.log('Seeding Plants...');
