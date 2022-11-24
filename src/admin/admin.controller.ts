@@ -7,15 +7,11 @@ import {
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserRole, UserDto } from 'src/dto/user.dto';
 
-import { AdminService } from './admin.service';
 import { UserService } from 'src/user/user.service';
 
 @Controller('admin')
 export class AdminController {
-  constructor(
-    private readonly adminService: AdminService,
-    private readonly userService: UserService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Post('user')
   async createUser(@Body() createUserPayload: CreateUserDto): Promise<UserDto> {

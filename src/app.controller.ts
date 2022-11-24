@@ -42,4 +42,9 @@ export class AppController {
       limit: +queryDto.limit || DEFAULT_LIMIT,
     });
   }
+
+  @Get('content')
+  async routeToCheckParentControl() {
+    return { message: 'You are allowed to access this route' };
+  }
 }
