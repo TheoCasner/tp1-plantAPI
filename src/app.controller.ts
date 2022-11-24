@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
-import { PlantQueryDto } from './dto/plant.dto';
+import { PlantDto, PlantQueryDto } from './dto/plant.dto';
 
 import { PlantEntity } from './entity/plant.entity';
 import { PlantService } from './plant/plant.service';
@@ -37,7 +37,10 @@ export class AppController {
     type: [PlantEntity],
   })
   @Get()
-  getAllPlants(@Query() queryDto: PlantQueryDto): PlantEntity[] {
-    return this.plantService.getAllPlants(queryDto);
+  async getAllPlants(@Query() queryDto: PlantQueryDto): Promise<PlantDto[]> {
+    return this.plantService.getAllPlants({
+      offset: +queryDto.offset,
+      limit: +queryDto.limit,
+    });
   }
 }

@@ -60,7 +60,10 @@ export class PlantController {
     @Query() queryDto: PlantQueryDto,
     @Param('prefix') prefix: string,
   ): PlantDto[] {
-    return this.plantService.getPlantMatchingPrefix(prefix, queryDto);
+    return this.plantService.getPlantMatchingPrefix(prefix, {
+      offset: +queryDto.offset,
+      limit: +queryDto.limit,
+    });
   }
 
   @ApiOperation({ summary: 'Get plant by Id' })

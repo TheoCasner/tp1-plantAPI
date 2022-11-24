@@ -1,13 +1,23 @@
 import * as plant from '../../plant.json';
 
+import { Plant, PrismaClient } from '@prisma/client';
+
 import { Injectable } from '@nestjs/common';
 import { PlantEntity } from '../entity/plant.entity';
 import { PlantQueryDto } from '../dto/plant.dto';
 
 @Injectable()
 export class PlantService {
-  getAllPlants(queryDto: PlantQueryDto): PlantEntity[] {
-    return plant.slice(queryDto.offset).slice(0, queryDto.limit);
+  constructor(private readonly prisma: PrismaClient) {}
+
+  async getAllPlants(queryDto: PlantQueryDto): Promise<Plant[]> {
+    return this.prisma.plant.findMany({
+      skip: queryDto.offset,
+      take: queryDto.limit,
+      where: {
+        deleted: false,
+      },
+    });
   }
 
   getPlantById(id: number): PlantEntity {
