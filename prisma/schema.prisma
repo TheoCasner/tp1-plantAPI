@@ -17,3 +17,9 @@ model Plant {
   imageURL   String? @map("image_url")
   deleted    Boolean @default(false)
 }
+
+model User {
+  id   Int    @id @default(autoincrement())
+  role String
+  age  Int
+}

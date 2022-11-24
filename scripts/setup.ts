@@ -1,5 +1,6 @@
 import { Plant, PrismaClient } from '@prisma/client';
 
+import { ROLE } from 'src/dto/user.dto';
 import { execSync } from 'child_process';
 import { readFileSync } from 'fs';
 
@@ -84,12 +85,29 @@ async function seedPlantsDb(plantsFromJson: Plant[]): Promise<void> {
   console.log('Finished seeding !');
 }
 
+async function seedAdmin(): Promise<void> {
+  const users = await prisma.user.findMany();
+  if (users.length === 0) {
+    console.log('Seeding Admin...');
+    await prisma.user.create({
+      data: {
+        role: ROLE.ADMIN,
+        age: 22,
+      },
+    });
+    console.log('Admin seeded...');
+  } else {
+    console.log('Admin already exists skipping...');
+  }
+}
+
 async function main(args: any): Promise<void> {
   if (args.length <= 2) throw new Error('No file path provided !');
 
   const plantsFromJson = await getJsonSeedFile(args[2]);
   await setupDb();
   await seedPlantsDb(plantsFromJson);
+  await seedAdmin();
   await prisma.$disconnect();
 }
 
