@@ -17,20 +17,13 @@ export class PlantService {
     });
   }
 
-  async getPlantById(id: number): Promise<PlantDto> {
-    const plantToFind = await this.prisma.plant.findFirst({
-      where: { id },
-    });
-
-    if (!plantToFind) throw new Error('Plant Not Found');
-    return plantToFind;
-  }
-
   getPlantMatchingPrefix(
     prefix: string,
     queryDto: PlantQueryDto,
   ): Promise<PlantDto[]> {
-    const query = this.prisma.plant.findMany({
+    if (!prefix) return this.getAllPlants(queryDto);
+
+    return this.prisma.plant.findMany({
       skip: queryDto.offset,
       take: queryDto.limit,
       where: {
@@ -40,7 +33,14 @@ export class PlantService {
         deleted: false,
       },
     });
-    if (!prefix) query['where'] = { deleted: false };
-    return query;
+  }
+
+  async getPlantById(id: number): Promise<PlantDto> {
+    const plantToFind = await this.prisma.plant.findFirst({
+      where: { id },
+    });
+
+    if (!plantToFind) throw new Error('Plant Not Found');
+    return plantToFind;
   }
 }

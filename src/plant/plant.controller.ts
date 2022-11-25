@@ -51,7 +51,7 @@ export class PlantController {
     },
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'Returns the plant with the given prefix',
     type: [PlantDto],
   })
@@ -76,7 +76,7 @@ export class PlantController {
     },
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'Returns the plant with the given id',
     type: PlantDto,
   })

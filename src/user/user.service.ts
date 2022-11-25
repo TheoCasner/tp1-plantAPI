@@ -1,4 +1,9 @@
-import { CreateUserDto, ROLE, UpdateUserRole, UserDto } from 'src/dto/user.dto';
+import {
+  CreateUserDto,
+  ROLE,
+  UpdateUserRoleDto,
+  UserDto,
+} from 'src/dto/user.dto';
 
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
@@ -17,7 +22,7 @@ export class UserService {
     });
   }
 
-  async updateUserRole(updateUserPayload: UpdateUserRole): Promise<UserDto> {
+  async updateUserRole(updateUserPayload: UpdateUserRoleDto): Promise<UserDto> {
     if (!Object.values(ROLE).includes(updateUserPayload.role)) {
       throw new Error('Invalid role');
     }

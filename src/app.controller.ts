@@ -1,5 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiOperation,
   ApiQuery,
   ApiResponse,
@@ -37,7 +38,7 @@ export class AppController {
     },
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'Returns a list of plants',
     type: [PlantDto],
   })
@@ -53,15 +54,16 @@ export class AppController {
     summary: 'Check if you are old enough to bypass parentcontrol',
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'Returns the message if you can access',
     type: [MessageDto],
   })
   @ApiUnauthorizedResponse({
     status: 401,
-    description: 'Unauthorized',
+    description: 'Unauthorized if too young',
     type: [MessageDto],
   })
+  @ApiBearerAuth()
   @Get('content')
   async routeToCheckParentControl(): Promise<MessageDto> {
     return { message: 'You are allowed to access this route' };

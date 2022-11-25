@@ -7,37 +7,28 @@ import {
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiBody,
   ApiOperation,
-  ApiParam,
   ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
-import { CreateUserDto, UpdateUserRole, UserDto } from 'src/dto/user.dto';
+import { CreateUserDto, UpdateUserRoleDto, UserDto } from 'src/dto/user.dto';
 
 import { UserService } from 'src/user/user.service';
 
+@ApiTags('admin')
 @Controller('admin')
 export class AdminController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Create a new user' })
-  @ApiParam({
-    name: 'age',
-    description: 'The age of the user',
-    required: true,
-    schema: {
-      type: 'integer',
-    },
-  })
-  @ApiParam({
-    name: 'role',
-    description: 'The role of the user, can be admin or user',
-    required: true,
-    schema: {
-      type: 'string',
-    },
+  @ApiBody({
+    type: CreateUserDto,
+    description: 'The payload to create a new user',
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'Returns the created user',
     type: [UserDto],
   })
@@ -45,6 +36,7 @@ export class AdminController {
     status: 400,
     description: 'If the role is not correct',
   })
+  @ApiBearerAuth()
   @Post('user')
   async createUser(@Body() createUserPayload: CreateUserDto): Promise<UserDto> {
     try {
@@ -55,24 +47,12 @@ export class AdminController {
   }
 
   @ApiOperation({ summary: 'Update a user role' })
-  @ApiParam({
-    name: 'id',
-    description: 'The id of the user to update',
-    required: true,
-    schema: {
-      type: 'integer',
-    },
-  })
-  @ApiParam({
-    name: 'role',
-    description: 'The role to update the user to, can be admin or user',
-    required: true,
-    schema: {
-      type: 'string',
-    },
+  @ApiBody({
+    type: UpdateUserRoleDto,
+    description: "The payload to update user's role",
   })
   @ApiResponse({
-    status: 200,
+    status: 201,
     description: 'Returns the updated user',
     type: [UserDto],
   })
@@ -80,9 +60,10 @@ export class AdminController {
     status: 400,
     description: 'If the role is not correct',
   })
+  @ApiBearerAuth()
   @Put('user')
   async updateUserRole(
-    @Body() updateUserPayload: UpdateUserRole,
+    @Body() updateUserPayload: UpdateUserRoleDto,
   ): Promise<UserDto> {
     try {
       return await this.userService.updateUserRole(updateUserPayload);

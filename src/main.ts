@@ -10,6 +10,7 @@ async function bootstrap() {
     .setTitle('Plant API')
     .setDescription('Woohooo I love plants !! 🌱🌱🌱')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
