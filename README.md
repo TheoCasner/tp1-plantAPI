@@ -85,8 +85,24 @@ You can find the swagger at `/docs`
 
 ## Routes
 
-`/` -> Find All Plants
+### Default
 
-`/plant/:id` -> Find One Plant
+GET `/` -> Find All Plants
 
-`/plant/search/:prefix` -> Find All Plants Matching Prefix
+GET `/content` -> Route to check if you are old enough to not have parent control
+
+### Plant
+
+GET `/plant/:id` -> Find One PlantA
+
+GET `/plant/search/:prefix` -> Find All Plants Matching Prefix
+
+### Admin
+
+POST `admin/user` -> add a new user
+
+PUT `admin/user` -> update a user role
+
+## Authorization
+
+You can use the swagger or use Postman and add following header -> **authorization**
