@@ -89,7 +89,7 @@ You can find the swagger at `/docs`
 
 GET `/` -> Find All Plants
 
-GET `/content` -> Route to check if you are old enough to not have parent control
+GET `/content` -> Route to check if you are old enough to not have parent control, requires a base64 encoded userId as authorization Header
 
 ### Plant
 
@@ -99,9 +99,9 @@ GET `/plant/search/:prefix` -> Find All Plants Matching Prefix
 
 ### Admin
 
-POST `admin/user` -> add a new user
+POST `admin/user` -> add a new user, requires a base64 encoded userId as authorization Header
 
-PUT `admin/user` -> update a user role
+PUT `admin/user` -> update a user role, requires a base64 encoded userId as authorization Header
 
 ## Authorization
 
